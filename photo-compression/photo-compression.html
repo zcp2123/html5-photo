@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+</head>
+<body>
+<input type="file" name="file" id="file" onchange="change();">
+<p>要使用的图像：</p>
+<div name="result" id="result">
+</div>
+<div>
+	<img src="#" id="new" alt="压缩后的图片" title='压缩后的图片'/>
+</div>
+<p>画布：</p>
+<canvas id="myCanvas" width="600" height="406" style="border:1px solid #d3d3d3;background:#ffffff;">
+    Your browser does not support the HTML5 canvas tag.
+</canvas>
+
+<script>
+    function change(){
+        var file = document.getElementById('file').files[0];
+        var result = document.getElementById('result');
+        
+        var reader = new FileReader();
+        reader.onload = function(e){
+			var c=document.getElementById("myCanvas");
+			var ctx=c.getContext("2d");
+            result.innerHTML = "<img id='res' width='600px' title='压缩前的图片' alt='压缩前的图片' src='"+this.result+"' />";
+            var img = document.getElementById("res");
+			var size = getRealSize(img);
+			c.width = size[0]/10;
+			c.height = size[1]/10;
+			var imgNew = document.getElementById("new");
+            ctx.drawImage(img,0,0,size[0]/10,size[1]/10);
+			
+            var data = c.toDataURL();
+            imgNew.src = data;
+        }
+        reader.readAsDataURL(file);
+    }
+	function getRealSize(img){
+		var real_width,
+			real_height,
+            im          = document.createElement('img');
+		im.src      = img.src;
+		real_width  = im.width;
+		real_height = im.height;
+		return [real_width,real_height];
+	}
+</script>
+
+</body>
+</html>
